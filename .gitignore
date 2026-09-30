@@ -1,0 +1,5 @@
+.env
+env.generated.js
+node_modules/
+.DS_Store
+_debug.html

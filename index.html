@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>K Arya Sekhar Das — Security Researcher &amp; OSS Maintainer</title>
+<meta name="description" content="Third-year ECE undergrad at LNMIIT Jaipur. Security research, supply-chain tooling, OpenSSF Minder maintainer, formally verified RTL, and motion work.">
+<meta name="author" content="K Arya Sekhar Das">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="K Arya Sekhar Das — Security Researcher &amp; OSS Maintainer">
+<meta property="og:description" content="I hunt bugs, maintain OpenSSF Minder, convert RTL with formal proofs, and cut motion on the side.">
+<meta property="og:image" content="assets/arya-stage.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&amp;family=DM+Mono:wght@400;500&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Rough-edge filters + reused marks. Everything referencing url(#rough) etc. needs this. -->
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="rough" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="brush" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="torn" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="4" seed="2" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+
+    <!-- Terminal-prompt logomark. Set `color` on the <svg> to recolour the plate. -->
+    <symbol id="logomark" viewBox="0 0 100 100">
+      <rect x="6" y="16" width="88" height="68" rx="14" fill="currentColor" filter="url(#rough)"/>
+      <path d="M24 36 L40 50 L24 64" fill="none" stroke="#161412" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#rough)"/>
+      <path d="M50 64 H74" stroke="#161412" stroke-width="8" stroke-linecap="round" filter="url(#rough)"/>
+    </symbol>
+
+    <!-- Hand squiggle. stroke/stroke-width come from the <svg> that uses it. -->
+    <symbol id="squiggle" viewBox="0 0 100 24" preserveAspectRatio="none">
+      <path d="M2 12 C 10 2, 18 2, 26 12 S 42 22, 50 12 S 66 2, 74 12 S 90 22, 98 12" fill="none" stroke="currentColor" stroke-linecap="round" filter="url(#rough)"/>
+    </symbol>
+
+    <symbol id="sunburst" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="27" fill="none" stroke="currentColor" stroke-linecap="round" filter="url(#rough)"/>
+      <path d="M50 4 V32 M50 68 V96 M4 50 H32 M68 50 H96" stroke="currentColor" stroke-linecap="round" filter="url(#rough)"/>
+      <circle cx="50" cy="50" r="4" fill="currentColor" stroke="none"/>
+    </symbol>
+
+    <symbol id="sunburst-plain" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="27" fill="none" stroke="currentColor" stroke-linecap="round" filter="url(#rough)"/>
+      <path d="M50 4 V32 M50 68 V96 M4 50 H32 M68 50 H96" stroke="currentColor" stroke-linecap="round" filter="url(#rough)"/>
+    </symbol>
+
+    <symbol id="curvearrow" viewBox="0 0 100 50">
+      <path d="M6 10 C 30 40, 60 50, 92 36" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" filter="url(#rough)"/>
+      <path d="M80 26 L93 36 L78 44" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#rough)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="page">
+
+<!-- ========================= nav ========================= -->
+<div class="nav-wrap">
+  <nav class="nav" aria-label="Primary">
+    <a class="nav__brand" href="#home">
+      <svg class="nav__mark" style="color:#E8B021" aria-hidden="true"><use href="#logomark"/></svg>
+      <span class="nav__name">intelligent-ears</span>
+      <span class="nav__tag"></span>
+    </a>
+
+    <div class="nav__links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#research">Research</a>
+      <a href="#writing">Writing</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <a class="nav__cta" href="mailto:24uec247@lnmiit.ac.in">Let's talk<span aria-hidden="true">→</span></a>
+
+    <button class="nav__toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-menu">
+      <span data-menu-label>Menu</span><span aria-hidden="true" data-menu-icon>☰</span>
+    </button>
+
+    <div class="nav__menu" id="nav-menu" data-menu hidden>
+      <a href="#home">HOME</a>
+      <a href="#about">ABOUT</a>
+      <a href="#work">WORK</a>
+      <a href="#research">RESEARCH</a>
+      <a href="#writing">WRITING</a>
+      <a href="#contact">CONTACT →</a>
+    </div>
+  </nav>
+</div>
+
+<main>
+
+<!-- ========================= hero ========================= -->
+<section class="hero" id="home" aria-labelledby="hero-title">
+  <div class="dots" style="top:30px;left:-20px;width:180px;height:140px;opacity:.35"></div>
+  <div class="hero__grid">
+    <div class="hero__copy">
+      <p class="hero__kicker">
+        <svg style="width:14px;height:14px;color:#E0482A" aria-hidden="true"><use href="#logomark"/></svg>
+        SECURITY RESEARCHER · OSS MAINTAINER · MOTION
+      </p>
+      <h1 class="hero__title" id="hero-title">
+        <span class="hero__first">Arya</span>
+        <span class="hero__last mark">Sekhar Das<svg viewBox="0 0 400 34" preserveAspectRatio="none" aria-hidden="true"><path data-draw d="M6 22 C 70 10, 150 28, 230 15 S 350 8, 394 18" fill="none" stroke="#E0482A" stroke-width="13" stroke-linecap="round" filter="url(#brush)"/><path data-draw d="M30 28 C 120 20, 240 30, 380 22" fill="none" stroke="#E0482A" stroke-width="4" stroke-linecap="round" opacity=".75" filter="url(#brush)"/></svg></span>
+      </h1>
+      <p class="hero__lede">Third-year ECE undergrad at LNMIIT Jaipur. I hunt bugs, maintain <strong>OpenSSF Minder</strong>, convert RTL with formal proofs, and cut motion on the side.</p>
+      <div class="hero__actions">
+        <a class="pill pill--ink" href="#work">View my work<span class="pill__glyph" aria-hidden="true">→</span></a>
+        <a class="pill pill--ghost" href="#writing">Read my writing<span class="pill__glyph" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="hero__art">
+      <svg class="hero__paper" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 L96 2 L98 94 L3 98 Z" fill="#E8B021" filter="url(#torn)"/></svg>
+      <img class="hero__cutout" src="assets/arya-cutout.png" alt="K Arya Sekhar Das" data-optional>
+      <div class="hero__aside">
+        <span>that's me,<br>probably debugging</span>
+        <svg style="width:80px;transform:scaleX(-1) rotate(20deg);overflow:visible;color:#161412" aria-hidden="true"><use href="#curvearrow"/></svg>
+      </div>
+      <p class="hero__status"><i aria-hidden="true"></i>OPEN TO INTERNSHIPS</p>
+
+      <!-- laptop -->
+      <svg viewBox="0 0 120 120" style="position:absolute;top:6%;left:-6%;width:clamp(96px,11vw,140px);transform:rotate(-8deg);z-index:2;overflow:visible" aria-hidden="true">
+        <path d="M44 18 L32 2 M76 18 L90 0" stroke="#161412" stroke-width="3" stroke-linecap="round" filter="url(#rough)"/>
+        <rect x="6" y="16" width="108" height="80" rx="12" fill="#F4EDE0" stroke="#161412" stroke-width="3" filter="url(#rough)"/>
+        <rect x="16" y="26" width="70" height="58" rx="9" fill="#161412"/>
+        <path class="anim-wave" d="M22 58 C 27 42, 32 42, 37 58 S 47 74, 52 58 S 62 42, 67 58 S 77 70, 80 58" fill="none" stroke="#E8B021" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="10 4"/>
+        <circle cx="100" cy="38" r="6" fill="#E0482A" stroke="#161412" stroke-width="2"/>
+        <circle cx="100" cy="56" r="5" fill="#161412"/>
+        <path d="M94 70 H106 M94 76 H106 M94 82 H106" stroke="#161412" stroke-width="2" stroke-linecap="round"/>
+        <path d="M34 96 L28 112 H92 L86 96 Z" fill="#E0482A" stroke="#161412" stroke-width="2.5" stroke-linejoin="round" filter="url(#rough)"/>
+      </svg>
+
+      <svg style="position:absolute;top:2%;right:0;width:46px;z-index:2;color:#161412;stroke-width:7" aria-hidden="true"><use href="#sunburst"/></svg>
+      <svg viewBox="0 0 100 24" style="position:absolute;left:-2%;bottom:6%;width:110px;z-index:2;color:#E0482A;stroke-width:4" aria-hidden="true"><use href="#squiggle"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= about ========================= -->
+<section class="about section--anchor" id="about" aria-labelledby="about-title">
+  <div class="dots" style="right:4%;top:8%;width:150px;height:110px;opacity:.55;--dot:#E0482A"></div>
+  <svg class="deco" viewBox="0 0 100 24" style="left:3%;bottom:8%;width:120px;color:#161412;stroke-width:3.5" aria-hidden="true"><use href="#squiggle"/></svg>
+
+  <div class="about__grid">
+    <div class="about__media">
+      <div class="about__frame">
+        <img src="assets/arya-stage.jpg" alt="Arya at the desk" loading="lazy">
+      </div>
+      <div class="about__tape" aria-hidden="true"></div>
+      <div class="about__badge" data-badge="signal" aria-hidden="true"></div>
+    </div>
+
+    <div>
+      <p class="eyebrow">ABOUT</p>
+      <h2 class="h2 about__h2" id="about-title">Break things <span class="mark">carefully.<svg viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"><path data-draw d="M4 18 C 80 8, 170 26, 296 12" fill="none" stroke="#E8B021" stroke-width="12" stroke-linecap="round" filter="url(#brush)"/></svg></span> Build things that <em>last.</em></h2>
+      <div class="about__body">
+        <p>I'm a third-year Electronics &amp; Communication undergrad at LNMIIT Jaipur and a software engineer working across Go, Python and TypeScript — shipping production code to open source under the Linux Foundation and OpenSSF.</p>
+        <p>I maintain <strong>OpenSSF Minder</strong>, contribute upstream to ProjectDiscovery, CERT-Polska and BOMHort, and spend the rest of the week on CTFs, formally verified RTL, and motion work in After Effects and DaVinci Resolve.</p>
+      </div>
+      <div class="about__facts">
+        <div>
+          <div class="fact__label">STUDYING</div>
+          <div class="fact__value">B.Tech ECE, LNMIIT<br>2024 – 2028</div>
+        </div>
+        <div>
+          <div class="fact__label">MAINTAINING</div>
+          <div class="fact__value">Minder, OpenSSF<br>via LFX mentorship</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= what I do ========================= -->
+<section class="do section--dark" aria-labelledby="do-title">
+  <svg class="deco" viewBox="0 0 100 24" style="left:4%;bottom:6%;width:140px;color:#E8B021;stroke-width:4" aria-hidden="true"><use href="#squiggle"/></svg>
+  <svg class="deco" style="right:-90px;top:-70px;width:280px;opacity:.95;color:#E0482A;stroke-width:3" aria-hidden="true"><use href="#sunburst"/></svg>
+
+  <div class="shell" style="position:relative">
+    <p class="eyebrow eyebrow--mustard">WHAT I DO</p>
+    <h2 class="h2 do__h2" id="do-title">One person, <em>four</em> workbenches.</h2>
+
+    <div class="grid do__grid">
+      <article class="do__item">
+        <div class="do__top">
+          <svg viewBox="0 0 40 40" style="width:46px;height:46px" aria-hidden="true">
+            <path d="M20 4 L34 9 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V9 Z" fill="none" stroke="#F4EDE0" stroke-width="2" stroke-linejoin="round" filter="url(#rough)"/>
+            <path d="M14 20 L19 25 L27 15" fill="none" stroke="#E8B021" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="do__num">01</span>
+        </div>
+        <h3>Security Research</h3>
+        <p>Bug bounty on Bugcrowd, HackerOne &amp; Intigriti, bounty-awarded Nuclei CVE templates, 40+ CTFs.</p>
+      </article>
+
+      <article class="do__item">
+        <div class="do__top">
+          <svg viewBox="0 0 40 40" style="width:46px;height:46px" aria-hidden="true">
+            <path d="M11 29 L29 11 M11 29 L29 29" fill="none" stroke="#F4EDE0" stroke-width="2" filter="url(#rough)"/>
+            <circle cx="11" cy="29" r="5" fill="#161412" stroke="#F4EDE0" stroke-width="2"/>
+            <circle cx="29" cy="11" r="5" fill="#E8B021" stroke="#F4EDE0" stroke-width="2"/>
+            <circle cx="29" cy="29" r="5" fill="#161412" stroke="#F4EDE0" stroke-width="2"/>
+          </svg>
+          <span class="do__num">02</span>
+        </div>
+        <h3>Open Source &amp; Supply Chain</h3>
+        <p>Maintainer at OpenSSF Minder. Sigstore, cosign, in-toto, SBOM (SPDX) and policy-as-code.</p>
+      </article>
+
+      <article class="do__item">
+        <div class="do__top">
+          <svg viewBox="0 0 40 40" style="width:46px;height:46px" aria-hidden="true">
+            <rect x="10" y="10" width="20" height="20" rx="2" fill="none" stroke="#F4EDE0" stroke-width="2" filter="url(#rough)"/>
+            <rect x="16" y="16" width="8" height="8" fill="#E8B021"/>
+            <path d="M15 4 V10 M20 4 V10 M25 4 V10 M15 30 V36 M20 30 V36 M25 30 V36 M4 15 H10 M4 20 H10 M4 25 H10 M30 15 H36 M30 20 H36 M30 25 H36" stroke="#F4EDE0" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="do__num">03</span>
+        </div>
+        <h3>Hardware / RTL</h3>
+        <p>Verilog and TL-Verilog, with formal equivalence checking through EQY / SymbiYosys.</p>
+      </article>
+
+      <article class="do__item">
+        <div class="do__top">
+          <svg viewBox="0 0 40 40" style="width:46px;height:46px" aria-hidden="true">
+            <rect x="4" y="8" width="32" height="24" rx="3" fill="none" stroke="#F4EDE0" stroke-width="2" filter="url(#rough)"/>
+            <path d="M17 14 L26 20 L17 26 Z" fill="#E8B021"/>
+            <path d="M9 8 V32 M31 8 V32" stroke="#F4EDE0" stroke-width="1.5" stroke-dasharray="2 3"/>
+          </svg>
+          <span class="do__num">04</span>
+        </div>
+        <h3>Motion &amp; Video</h3>
+        <p>2D animation and edits built in After Effects and DaVinci Resolve.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= skills + experience ========================= -->
+<section class="bench" aria-labelledby="bench-title">
+  <div class="bench__panel">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">SKILLS + EXPERIENCE</p>
+        <h2 class="h2 bench__h2" id="bench-title">Tools on the <em>bench.</em></h2>
+      </div>
+      <p class="bench__note">Dot levels are set in data.js — tune them to taste.</p>
+    </div>
+
+    <div class="bench__cols">
+      <div class="tools" data-tools></div>
+
+      <div class="timeline" data-timeline></div>
+
+      <div class="bench__art">
+        <svg viewBox="0 0 260 300" aria-hidden="true">
+          <path d="M100 20 L70 -10 M160 20 L196 -14" stroke="#F4EDE0" stroke-width="3" stroke-linecap="round" filter="url(#rough)"/>
+          <rect x="10" y="20" width="240" height="196" rx="24" fill="#F4EDE0" filter="url(#rough)"/>
+          <rect x="30" y="40" width="166" height="148" rx="20" fill="#161412"/>
+          <path d="M40 80 H186 M40 114 H186 M40 148 H186 M76 48 V180 M113 48 V180 M150 48 V180" stroke="#5E6B45" stroke-width="1"/>
+          <path class="anim-wave" d="M40 114 C 50 70, 60 70, 70 114 S 90 158, 100 114 S 120 70, 130 114 S 150 158, 160 114 S 175 82, 186 114" fill="none" stroke="#E8B021" stroke-width="3" stroke-linecap="round" stroke-dasharray="30 10"/>
+          <circle cx="222" cy="66" r="12" fill="#E0482A" stroke="#161412" stroke-width="2"/>
+          <path d="M222 66 L230 58" stroke="#161412" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="222" cy="106" r="12" fill="#161412"/>
+          <path d="M210 140 H234 M210 150 H234 M210 160 H234 M210 170 H234" stroke="#161412" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M70 216 L56 262 H204 L190 216 Z" fill="#E0482A" filter="url(#rough)"/>
+          <path d="M40 266 H220" stroke="#F4EDE0" stroke-width="4" stroke-linecap="round" filter="url(#rough)"/>
+        </svg>
+        <p class="bench__caption">SIGNAL / NOISE · CH.1</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= work ========================= -->
+<section class="work section--anchor" id="work" aria-labelledby="work-title">
+  <svg class="deco" style="left:2%;bottom:5%;width:56px;transform:rotate(12deg);color:#E0482A;stroke-width:6" aria-hidden="true"><use href="#sunburst-plain"/></svg>
+  <div class="dots" style="right:2%;bottom:3%;width:130px;height:90px;opacity:.35;background-size:13px 13px"></div>
+
+  <div class="shell">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">SELECTED WORK</p>
+        <h2 class="h2 work__h2" id="work-title">Things I've <em>shipped.</em></h2>
+      </div>
+      <div class="work__more">
+        <span>there's more</span>
+        <svg style="width:56px;overflow:visible;color:#161412" aria-hidden="true"><use href="#curvearrow"/></svg>
+        <a class="pill pill--sm pill--outline" href="https://github.com/intelligent-ears?tab=repositories" target="_blank" rel="noopener">View all<span class="pill__glyph" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <a class="card lift" href="https://github.com/intelligent-ears/Anchor" target="_blank" rel="noopener">
+        <div class="card__art" style="background:#E0482A">
+          <svg viewBox="0 0 200 200" style="position:absolute;right:-60px;bottom:-60px;width:280px" aria-hidden="true">
+            <circle cx="100" cy="100" r="92" fill="none" stroke="#161412" stroke-width="3" filter="url(#rough)"/>
+            <circle cx="100" cy="100" r="64" fill="none" stroke="#161412" stroke-width="3" filter="url(#rough)"/>
+            <circle cx="100" cy="100" r="36" fill="#F4EDE0" stroke="#161412" stroke-width="3" filter="url(#rough)"/>
+            <circle cx="100" cy="100" r="8" fill="#161412"/>
+          </svg>
+          <div style="position:absolute;left:20px;top:0;bottom:0;width:14px;background:#161412"></div>
+          <div class="card__meta" style="left:48px">RFC 8785<br>SIGSTORE / REKOR</div>
+          <div class="card__word" style="left:46px;bottom:18px;font-size:64px;line-height:.85;color:#F4EDE0">SIGNED.</div>
+        </div>
+        <div class="card__foot">
+          <div>
+            <div class="card__title">ANCHOR</div>
+            <div class="card__sub">Signed provenance for MCP tool schemas · Go</div>
+          </div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="card lift" href="https://github.com/intelligent-ears/N3" target="_blank" rel="noopener">
+        <div class="card__art" style="background:#161412">
+          <div class="dots" style="right:14px;top:14px;width:120px;height:90px;opacity:.6;background-size:12px 12px;--dot:#F4EDE0"></div>
+          <div style="position:absolute;left:-10px;bottom:-60px;font-family:Anton,sans-serif;font-size:280px;line-height:1;color:#E8B021;letter-spacing:-.02em">N3</div>
+          <div class="card__meta" style="color:#F4EDE0">ETHGLOBAL 2025<br>MCP · HARDHAT 3</div>
+        </div>
+        <div class="card__foot">
+          <div>
+            <div class="card__title">N3</div>
+            <div class="card__sub">Template-based scanner for smart contracts &amp; DApps</div>
+          </div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="card lift" href="https://github.com/intelligent-ears/SolSniffer" target="_blank" rel="noopener">
+        <div class="card__art" style="background:#E8B021">
+          <div style="position:absolute;left:0;right:0;top:96px;height:120px;background:repeating-linear-gradient(#161412 0 10px,transparent 10px 22px)"></div>
+          <div style="position:absolute;right:28px;top:62px;width:150px;height:150px;border-radius:50%;background:#E0482A;border:3px solid #161412;filter:url(#rough)"></div>
+          <div class="card__meta">AST → SARIF<br>UNCHECKED SEND()</div>
+          <div class="card__word">SNIFF.</div>
+        </div>
+        <div class="card__foot">
+          <div>
+            <div class="card__title">SOLSNIFFER</div>
+            <div class="card__sub">Static analysis CLI for Solidity</div>
+          </div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+
+      <a class="card lift" href="#work">
+        <div class="card__art" style="background:#EADFCB">
+          <svg viewBox="0 0 300 120" preserveAspectRatio="none" style="position:absolute;left:0;top:110px;width:100%;height:90px" aria-hidden="true">
+            <path d="M0 90 H40 V20 H90 V90 H140 V20 H190 V90 H240 V20 H300" fill="none" stroke="#161412" stroke-width="5" stroke-linejoin="round" filter="url(#rough)"/>
+          </svg>
+          <svg style="position:absolute;right:18px;top:18px;width:78px;color:#E0482A" aria-hidden="true"><use href="#logomark"/></svg>
+          <div class="card__meta">VERILOG ⇄ TL-VERILOG<br>REDWOOD EDA · 2026</div>
+          <div class="card__word">PROVEN.</div>
+        </div>
+        <div class="card__foot">
+          <div>
+            <div class="card__title">MAKERCHIP-ATLAS</div>
+            <div class="card__sub">VS Code extension · TypeScript <span class="tbd">LINK TBD</span></div>
+          </div>
+          <span class="card__arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= research ========================= -->
+<section class="research section--anchor" id="research" aria-labelledby="research-title">
+  <div class="research__badge" data-badge="bug" aria-hidden="true"></div>
+  <div class="shell">
+    <p class="eyebrow eyebrow--ink">RESEARCH &amp; RECOGNITION</p>
+    <h2 class="h2 research__h2" id="research-title">Proof it <em>breaks.</em></h2>
+
+    <div class="grid research__grid">
+      <article class="stat lift">
+        <div class="stat__top">
+          <svg viewBox="0 0 40 40" style="width:40px;height:40px" aria-hidden="true">
+            <path d="M9 36 V4" stroke="#161412" stroke-width="3" stroke-linecap="round"/>
+            <path d="M10 6 H32 L26 13 L32 20 H10 Z" fill="#E8B021" stroke="#161412" stroke-width="2.5" stroke-linejoin="round" filter="url(#rough)"/>
+          </svg>
+          <span class="stat__tag">CTF · HTB</span>
+        </div>
+        <div class="stat__num">40+</div>
+        <div class="stat__lead">CTF competitions — crypto, web, pwn</div>
+        <p>HTB Apprentice, Level 22. Authored and submitted <strong>“Curveball”</strong>, an original HTB machine chaining a WordPress RCE, PATH-injection privesc and ECDH key recovery from a hardcoded seed.</p>
+      </article>
+
+      <article class="stat lift">
+        <div class="stat__top">
+          <svg viewBox="0 0 40 40" style="width:40px;height:40px" aria-hidden="true">
+            <path d="M20 3 L35 8 V19 C35 28 29 34 20 37 C11 34 5 28 5 19 V8 Z" fill="#E8B021" stroke="#161412" stroke-width="2.5" stroke-linejoin="round" filter="url(#rough)"/>
+            <path d="M20 12 V22 M20 27 V28" stroke="#161412" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <span class="stat__tag">BUG BOUNTY · CVE</span>
+        </div>
+        <div class="stat__num">7</div>
+        <div class="stat__lead">Bounty-awarded CVE templates, merged</div>
+        <p>In ProjectDiscovery nuclei-templates, incl. CVE-2025-34035. Production findings on Bugcrowd, HackerOne and Intigriti — a GrowthBook SDK key exposure on Make.com and a stored-XSS chain in the Clockify extension.</p>
+      </article>
+
+      <article class="stat lift">
+        <div class="stat__top">
+          <svg viewBox="0 0 40 40" style="width:40px;height:40px" aria-hidden="true">
+            <path d="M9 36 V4" stroke="#161412" stroke-width="3" stroke-linecap="round"/>
+            <path d="M10 6 C16 2, 22 10, 32 6 V20 C22 24, 16 16, 10 20 Z" fill="#E8B021" stroke="#161412" stroke-width="2.5" stroke-linejoin="round" filter="url(#rough)"/>
+          </svg>
+          <span class="stat__tag">TALKS · STANDARDS</span>
+        </div>
+        <div class="stat__num">2</div>
+        <div class="stat__lead">Talks under review — OSS Summit Japan 2026</div>
+        <p>On security-drift guardrails in Minder and supply-chain baselines. Proposed the AIGS-SC-09 tool-manifest integrity control; active in OpenSSF's ORBIT security-baseline SIG.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= writing ========================= -->
+<section class="writing section--anchor" id="writing" aria-labelledby="writing-title">
+  <svg class="deco" viewBox="0 0 100 24" style="right:5%;top:6%;width:130px;transform:rotate(-6deg);color:#E0482A;stroke-width:4" aria-hidden="true"><use href="#squiggle"/></svg>
+  <div class="dots" style="left:1%;bottom:6%;width:120px;height:120px;opacity:.3;background-size:13px 13px"></div>
+
+  <div class="shell">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">WRITING</p>
+        <h2 class="h2 writing__h2" id="writing-title">Notes &amp; <em>write-ups.</em></h2>
+      </div>
+      <a class="pill pill--sm pill--outline" href="https://medium.com/@24UEC247" target="_blank" rel="noopener">All on Medium<span class="pill__glyph" aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="grid writing__grid">
+      <a class="post lift" href="https://medium.com/@24UEC247" target="_blank" rel="noopener">
+        <div class="post__art" style="background:#161412">
+          <svg style="position:absolute;left:50%;top:50%;width:190px;transform:translate(-50%,-50%) rotate(12deg);color:#E8B021" aria-hidden="true"><use href="#logomark"/></svg>
+          <div class="post__no">NO. 01</div>
+        </div>
+        <div class="post__body">
+          <div class="post__meta"><span>SUPPLY CHAIN</span><span class="post__read">— MIN READ</span></div>
+          <div class="post__title">[ Article title — pull from Medium ]</div>
+          <span class="post__flag">PLACEHOLDER</span>
+        </div>
+      </a>
+
+      <a class="post lift" href="https://medium.com/@24UEC247" target="_blank" rel="noopener">
+        <div class="post__art" style="background:#5E6B45">
+          <svg viewBox="0 0 100 60" preserveAspectRatio="none" style="position:absolute;inset:26px 0 40px;width:100%;height:calc(100% - 66px)" aria-hidden="true">
+            <path d="M0 12 C 8 2, 17 2, 25 12 S 42 22, 50 12 S 67 2, 75 12 S 92 22, 100 12 M0 32 C 8 22, 17 22, 25 32 S 42 42, 50 32 S 67 22, 75 32 S 92 42, 100 32 M0 52 C 8 42, 17 42, 25 52 S 42 62, 50 52 S 67 42, 75 52 S 92 62, 100 52" fill="none" stroke="#F4EDE0" stroke-width="2.4" filter="url(#rough)"/>
+          </svg>
+          <div class="post__no">NO. 02</div>
+        </div>
+        <div class="post__body">
+          <div class="post__meta"><span>CTF WRITE-UP</span><span class="post__read">— MIN READ</span></div>
+          <div class="post__title">[ Article title — pull from Medium ]</div>
+          <span class="post__flag">PLACEHOLDER</span>
+        </div>
+      </a>
+
+      <a class="post lift" href="https://medium.com/@24UEC247" target="_blank" rel="noopener">
+        <div class="post__art" style="background:#E0482A">
+          <div style="position:absolute;inset:0;background-image:radial-gradient(#161412 1.6px,transparent 1.9px);background-size:16px 16px;opacity:.5"></div>
+          <div style="position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:#F4EDE0;border:2px solid #161412;filter:url(#rough)"></div>
+          <div class="post__no post__no--ink">NO. 03</div>
+        </div>
+        <div class="post__body">
+          <div class="post__meta"><span>OPENSSF SERIES</span><span class="post__read">— MIN READ</span></div>
+          <div class="post__title">[ Article title — pull from Medium ]</div>
+          <span class="post__flag">PLACEHOLDER</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= contact ========================= -->
+<section class="contact section--anchor" id="contact" aria-labelledby="contact-title">
+  <svg style="position:absolute;right:-120px;bottom:-140px;width:clamp(240px,28vw,380px);transform:rotate(-8deg);z-index:0" viewBox="0 0 100 100" aria-hidden="true">
+    <rect x="6" y="16" width="88" height="68" rx="14" fill="#E0482A" filter="url(#rough)"/>
+    <path d="M24 36 L40 50 L24 64" fill="none" stroke="#161412" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#rough)"/>
+    <path d="M50 64 H74" stroke="#161412" stroke-width="8" stroke-linecap="round" filter="url(#rough)"/>
+    <circle cx="50" cy="50" r="12" fill="#F4EDE0" stroke="#161412" stroke-width="1.2" filter="url(#rough)"/>
+  </svg>
+  <svg class="deco" style="right:clamp(160px,24vw,340px);top:14%;width:70px;z-index:0;color:#161412;stroke-width:6" aria-hidden="true"><use href="#sunburst"/></svg>
+  <svg class="deco" viewBox="0 0 100 24" style="right:clamp(120px,20vw,300px);bottom:14%;width:140px;z-index:0;color:#161412;stroke-width:4" aria-hidden="true"><use href="#squiggle"/></svg>
+
+  <div class="contact__grid">
+    <div>
+      <p class="eyebrow eyebrow--ink" style="margin-bottom:22px">CONTACT</p>
+      <h2 class="h2 contact__h2" id="contact-title">Have a bug, a <span class="mark">build,<svg viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"><path data-draw d="M4 16 C 90 6, 180 26, 296 12" fill="none" stroke="#161412" stroke-width="9" stroke-linecap="round" filter="url(#brush)"/></svg></span> or a <em>story</em> in mind?</h2>
+      <p class="contact__lede">Security findings, supply-chain tooling, RTL, or a motion piece — my inbox is open.</p>
+      <a class="contact__mail" href="mailto:24uec247@lnmiit.ac.in">or mail 24uec247@lnmiit.ac.in ↗</a>
+    </div>
+
+    <form class="form" id="contact-form" novalidate>
+      <div class="form__tape" aria-hidden="true"></div>
+      <div class="form__head">
+        <span class="form__title">DROP A LINE</span>
+        <span class="form__sla">REPLY IN ~48H</span>
+      </div>
+
+      <!-- Honeypot: a filled value means a bot, and the submit is dropped. -->
+      <input class="form__trap" type="text" name="company_site" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <input type="hidden" name="topic" value="Bug report" data-topic-value>
+
+      <div class="form__row">
+        <label class="field">NAME
+          <input name="from_name" type="text" autocomplete="name" placeholder="Your name" required>
+        </label>
+        <label class="field">EMAIL
+          <input name="reply_to" type="email" autocomplete="email" placeholder="you@domain.com" required>
+        </label>
+      </div>
+
+      <fieldset class="field" style="border:0;padding:0;margin:0">
+        <legend style="padding:0">WHAT'S IT ABOUT</legend>
+        <div class="chips" data-topics></div>
+      </fieldset>
+
+      <label class="field">MESSAGE
+        <textarea name="message" rows="4" placeholder="Tell me what you found, or what you're building…" required></textarea>
+      </label>
+
+      <div class="form__foot">
+        <button class="submit" type="submit">
+          <span data-submit-label>Start a conversation</span>
+          <span class="submit__glyph" aria-hidden="true">→</span>
+        </button>
+        <p class="status" data-contact-status role="status" aria-live="polite" hidden></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ========================= footer ========================= -->
+<footer class="footer">
+  <div class="shell">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">
+          <svg style="color:#E0482A" aria-hidden="true"><use href="#logomark"/></svg>
+          <span>ARYA</span>
+        </div>
+        <p class="footer__blurb">K Arya Sekhar Das. Break, build, ship, secure — from Jaipur.</p>
+      </div>
+
+      <div>
+        <div class="footer__label">NAVIGATE</div>
+        <nav class="footer__list" aria-label="Footer">
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#work">Work</a>
+          <a href="#research">Research</a>
+          <a href="#writing">Writing</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+
+      <div>
+        <div class="footer__label">ELSEWHERE</div>
+        <div class="footer__list">
+          <a href="https://github.com/intelligent-ears" target="_blank" rel="noopener">GitHub <span class="dim">intelligent-ears</span></a>
+          <a href="https://x.com/intel_ears" target="_blank" rel="noopener">X <span class="dim">@intel_ears</span></a>
+          <a href="https://app.hackthebox.com/users" target="_blank" rel="noopener">HTB <span class="dim">1nt3ll1g3ntears</span></a>
+          <a href="https://medium.com/@24UEC247" target="_blank" rel="noopener">Medium <span class="dim">@24UEC247</span></a>
+          <a href="https://linkedin.com/in/intelligentears" target="_blank" rel="noopener">LinkedIn <span class="dim">intelligentears</span></a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer__label">WRITE TO ME</div>
+        <a class="footer__mail" href="mailto:24uec247@lnmiit.ac.in">24uec247@<br>lnmiit.ac.in</a>
+      </div>
+
+      <div class="footer__badge" data-badge="floppy" aria-hidden="true"></div>
+    </div>
+
+    <div class="footer__bar">
+      <span>© 2026 K Arya Sekhar Das</span>
+      <a href="#home">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /.page -->
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="env.generated.js"></script>
+<script src="data.js"></script>
+<script src="main.js"></script>
+<script src="contact.js"></script>
+</body>
+</html>
