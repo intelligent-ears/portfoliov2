@@ -297,6 +297,13 @@ html[data-still] * { animation: none !important; }
 }
 .hero__status i { width: 8px; height: 8px; border-radius: 50%; background: var(--olive); }
 
+/* Decorative asterisk. It lives in the clear strip partway down the right
+   edge; at the top-right corner it collided with .hero__aside's second line. */
+.hero__spark {
+  position: absolute; top: 44%; right: -3%; width: 46px; z-index: 2;
+  color: var(--ink); stroke-width: 7;
+}
+
 /* --- about --------------------------------------------------------------- */
 
 .about { padding: clamp(40px, 5vw, 72px) var(--gutter) clamp(80px, 9vw, 130px); }
