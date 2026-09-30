@@ -297,11 +297,15 @@ html[data-still] * { animation: none !important; }
 }
 .hero__status i { width: 8px; height: 8px; border-radius: 50%; background: var(--olive); }
 
-/* Decorative asterisk. It lives in the clear strip partway down the right
-   edge; at the top-right corner it collided with .hero__aside's second line. */
+/* Decorative asterisk, tucked beside the first line of .hero__aside. */
 .hero__spark {
-  position: absolute; top: 44%; right: -3%; width: 46px; z-index: 2;
+  position: absolute; top: 2%; right: 0; width: 46px; z-index: 2;
   color: var(--ink); stroke-width: 7;
+}
+/* On a narrow art box the aside's second line reaches under it, so move it
+   to the clear margin on the left, below the laptop. */
+@media (max-width: 899px) {
+  .hero__spark { top: 30%; right: auto; left: -2%; }
 }
 
 /* --- about --------------------------------------------------------------- */
