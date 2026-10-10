@@ -25,10 +25,10 @@ window.SITE = {
       note: 'Agentic Verilog → TL-Verilog pipeline with formal equivalence (EQY/SymbiYosys); 5+ upstream PRs merged.',
     },
     {
-      when: '[START DATE] – NOW',
+      when: 'APR 2026 – NOW',
       role: 'Maintainer',
       org: 'Minder, OpenSSF',
-      note: 'Joined via LFX mentorship — rule testing and CI tooling for supply-chain security.',
+      note: 'Rule testing and CI tooling for supply-chain security.',
     },
     {
       when: 'OPEN SOURCE',

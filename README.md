@@ -93,7 +93,6 @@ Placeholders left deliberately, to fill in when you have the content:
 - the three **Writing** cards say `[ Article title — pull from Medium ]`
 - the **MAKERCHIP-ATLAS** work card links to `#work`, not a repo
 - the HTB footer link points at the HTB users index, not your profile
-- the Minder timeline entry reads `[START DATE] – NOW`
 
 ## Behaviour flags
 
