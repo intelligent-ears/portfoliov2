@@ -126,7 +126,14 @@
           setStatus('✓ Sent — talk soon.', 'sent');
         })
         .catch(function (error) {
-          console.error('[contact] send failed', error);
+          // EmailJS rejects with { status, text }; surface both plainly, since
+          // the raw object hides the one line that says what went wrong.
+          var status = error && error.status;
+          var detail = (error && (error.text || error.message)) || 'unknown error';
+          console.error(
+            '[contact] EmailJS rejected the send — status ' + status + ': ' + detail,
+            error
+          );
           setStatus('Couldn’t send — try again, or' + fallbackNote().toLowerCase(), 'error');
         })
         .then(function () {
