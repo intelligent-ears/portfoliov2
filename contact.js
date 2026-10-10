@@ -70,6 +70,17 @@
       return;
     }
 
+    // EmailJS ids are prefixed; a name or a swapped pair fails server-side with
+    // a generic 400, so flag the obvious shape errors here instead.
+    if (serviceId.indexOf('service_') !== 0) {
+      console.warn('[contact] EMAILJS_SERVICE_ID is "' + serviceId +
+        '" — expected something like "service_ab12cde". Copy the ID, not the name.');
+    }
+    if (templateId.indexOf('template_') !== 0) {
+      console.warn('[contact] EMAILJS_TEMPLATE_ID is "' + templateId +
+        '" — expected something like "template_ab12cde". Copy the ID, not the name.');
+    }
+
     window.emailjs.init({ publicKey: publicKey });
 
     var sending = false;
