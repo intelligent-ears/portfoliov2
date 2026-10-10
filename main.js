@@ -359,7 +359,7 @@
           ? (stats.best.count === 1 ? 'contribution on ' : 'contributions on ') +
             new Date(stats.best.date + 'T00:00:00').toDateString().slice(4, 10)
           : '');
-        set('[data-gh-status]', 'Live · updates whenever the page loads · hover a dot for the day');
+        set('[data-gh-status]', '');
       })
       .catch(function (err) {
         console.warn('[github] ' + err.message);

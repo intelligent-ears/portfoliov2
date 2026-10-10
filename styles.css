@@ -511,24 +511,38 @@ html[data-still] * { animation: none !important; }
   padding: clamp(18px, 2.6vw, 32px); background: #1D1A17;
 }
 .graph__scroll { overflow-x: auto; padding-bottom: 6px; }
-.graph__inner { display: inline-flex; flex-direction: column; gap: 8px; min-width: max-content; }
+
+/* The 53 week columns divide the full width rather than sitting at a fixed
+   cell size, so the graph fills its card. Below the min-width the scroller
+   takes over; 930px is the width the old 13px cells occupied, so narrow
+   screens keep the same density. */
+.graph__inner {
+  display: flex; flex-direction: column; gap: 8px;
+  width: 100%; min-width: 930px;
+}
 
 .graph__months {
   display: flex; gap: 4px; padding-left: 34px; height: 14px;
   font-family: var(--mono); font-size: 11px; color: var(--muted);
 }
-.graph__months span { width: 13px; flex: none; white-space: nowrap; overflow: visible; }
+/* One slot per week column so labels stay over the right week; the text is
+   wider than a column and is allowed to spill to the right. */
+.graph__months span { flex: 1 1 0; min-width: 0; white-space: nowrap; overflow: visible; }
 
-.graph__body { display: flex; gap: 4px; }
+.graph__body { display: flex; gap: 4px; align-items: stretch; }
 .graph__days {
   width: 30px; flex: none;
-  display: grid; grid-template-rows: repeat(7, 13px); row-gap: 4px;
-  font-family: var(--mono); font-size: 10px; color: var(--muted); align-items: center;
+  display: flex; flex-direction: column; gap: 4px;
+  font-family: var(--mono); font-size: 10px; color: var(--muted);
 }
-.graph__weeks { display: flex; gap: 4px; }
-.graph__week { display: flex; flex-direction: column; gap: 4px; flex: none; }
+/* Each label row matches one cell row, so Mon/Wed/Fri stay aligned as the
+   cells grow. */
+.graph__days span { flex: 1 1 0; display: flex; align-items: center; }
+
+.graph__weeks { display: flex; gap: 4px; flex: 1 1 auto; min-width: 0; }
+.graph__week { display: flex; flex-direction: column; gap: 4px; flex: 1 1 0; min-width: 0; }
 .graph__day {
-  width: 13px; height: 13px; border-radius: 50%;
+  width: 100%; aspect-ratio: 1; border-radius: 50%;
   background: var(--gh-quiet); transition: transform .15s;
 }
 .graph__day:hover { transform: scale(1.5); }
