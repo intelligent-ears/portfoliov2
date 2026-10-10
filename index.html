@@ -15,7 +15,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&amp;family=DM+Mono:wght@400;500&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Bungee&amp;family=DM+Mono:wght@400;500&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -68,6 +68,10 @@
 
 <div class="page">
 
+<!-- Intro curtain and custom cursor; both are built by main.js. -->
+<div class="loader" data-loader aria-hidden="true"></div>
+<div class="cursor" data-cursor-host aria-hidden="true"></div>
+
 <!-- ========================= nav ========================= -->
 <div class="nav-wrap">
   <nav class="nav" aria-label="Primary">
@@ -81,7 +85,7 @@
       <a href="#home">Home</a>
       <a href="#about">About</a>
       <a href="#work">Work</a>
-      <a href="#research">Research</a>
+      <a href="#activity">Activity</a>
       <a href="#writing">Writing</a>
       <a href="#contact">Contact</a>
     </div>
@@ -96,7 +100,7 @@
       <a href="#home">HOME</a>
       <a href="#about">ABOUT</a>
       <a href="#work">WORK</a>
-      <a href="#research">RESEARCH</a>
+      <a href="#activity">ACTIVITY</a>
       <a href="#writing">WRITING</a>
       <a href="#contact">CONTACT →</a>
     </div>
@@ -380,52 +384,57 @@
   </div>
 </section>
 
-<!-- ========================= research ========================= -->
-<section class="research section--anchor" id="research" aria-labelledby="research-title">
-  <div class="research__badge" data-badge="bug" aria-hidden="true"></div>
-  <div class="shell">
-    <p class="eyebrow eyebrow--ink">RESEARCH &amp; RECOGNITION</p>
-    <h2 class="h2 research__h2" id="research-title">Proof it <em>breaks.</em></h2>
+<!-- ========================= github activity ========================= -->
+<section class="activity section--anchor" id="activity" data-dark aria-labelledby="activity-title">
+  <div class="dots" style="right:3%;top:7%;width:150px;height:110px;opacity:.4;--dot:#E8B021"></div>
+  <svg class="deco" viewBox="0 0 100 24" style="left:4%;bottom:6%;width:130px;color:#E0482A;stroke-width:4" aria-hidden="true"><use href="#squiggle"/></svg>
 
-    <div class="grid research__grid">
-      <article class="stat lift">
-        <div class="stat__top">
-          <svg viewBox="0 0 40 40" style="width:40px;height:40px" aria-hidden="true">
-            <path d="M9 36 V4" stroke="#161412" stroke-width="3" stroke-linecap="round"/>
-            <path d="M10 6 H32 L26 13 L32 20 H10 Z" fill="#E8B021" stroke="#161412" stroke-width="2.5" stroke-linejoin="round" filter="url(#rough)"/>
-          </svg>
-          <span class="stat__tag">CTF · HTB</span>
-        </div>
-        <div class="stat__num">50+</div>
-        <div class="stat__lead">CTF competitions — crypto, web, pwn</div>
-        <p>HTB Apprentice, Level 25. Authored many CTF challenges for different CTFs.</p>
-      </article>
+  <div class="shell" style="position:relative">
+    <div class="activity__head">
+      <div>
+        <p class="eyebrow eyebrow--mustard">OPEN SOURCE ACTIVITY</p>
+        <h2 class="h2 activity__h2" id="activity-title">Green dots, <em>daily.</em></h2>
+        <p class="activity__lede">Every commit, review and issue on GitHub over the last year, pulled live from <span class="mono-accent">@intelligent-ears</span>.</p>
+      </div>
+      <div class="activity__count">
+        <div class="activity__total" data-gh-total>&mdash;</div>
+        <div class="activity__caption">contributions<br>in the last year</div>
+      </div>
+    </div>
 
-      <article class="stat lift">
-        <div class="stat__top">
-          <svg viewBox="0 0 40 40" style="width:40px;height:40px" aria-hidden="true">
-            <path d="M20 3 L35 8 V19 C35 28 29 34 20 37 C11 34 5 28 5 19 V8 Z" fill="#E8B021" stroke="#161412" stroke-width="2.5" stroke-linejoin="round" filter="url(#rough)"/>
-            <path d="M20 12 V22 M20 27 V28" stroke="#161412" stroke-width="3" stroke-linecap="round"/>
-          </svg>
-          <span class="stat__tag">BUG BOUNTY · CVE</span>
+    <div class="graph">
+      <div class="graph__scroll">
+        <div class="graph__inner">
+          <div class="graph__months" data-gh-months></div>
+          <div class="graph__body">
+            <div class="graph__days"><span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span></div>
+            <div class="graph__weeks" data-gh-weeks></div>
+          </div>
         </div>
-        <div class="stat__num">7</div>
-        <div class="stat__lead">Bounty-awarded CVE templates, merged</div>
-        <p>In ProjectDiscovery nuclei-templates, incl. CVE-2025-34035. Production findings on Bugcrowd, HackerOne and Intigriti — a GrowthBook SDK key exposure on Make.com and a stored-XSS chain in the Clockify extension.</p>
-      </article>
+      </div>
+      <div class="graph__foot">
+        <span data-gh-status>Fetching contributions&hellip;</span>
+        <span class="graph__legend">
+          <span><i class="dot-quiet"></i>quiet</span>
+          <span><i class="dot-shipped"></i>shipped</span>
+        </span>
+      </div>
+    </div>
 
-      <article class="stat lift">
-        <div class="stat__top">
-          <svg viewBox="0 0 40 40" style="width:40px;height:40px" aria-hidden="true">
-            <path d="M9 36 V4" stroke="#161412" stroke-width="3" stroke-linecap="round"/>
-            <path d="M10 6 C16 2, 22 10, 32 6 V20 C22 24, 16 16, 10 20 Z" fill="#E8B021" stroke="#161412" stroke-width="2.5" stroke-linejoin="round" filter="url(#rough)"/>
-          </svg>
-          <span class="stat__tag">TALKS · STANDARDS</span>
-        </div>
-        <div class="stat__num">2</div>
-        <div class="stat__lead">Talks under review — OSS Summit Japan 2026</div>
-        <p>On security-drift guardrails in Minder and supply-chain baselines. Proposed the AIGS-SC-09 tool-manifest integrity control; active in OpenSSF's ORBIT security-baseline SIG.</p>
-      </article>
+    <div class="activity__stats">
+      <div class="statcard">
+        <div class="statcard__label">CURRENT STREAK</div>
+        <div class="statcard__value"><span data-gh-streak>&mdash;</span><small>days</small></div>
+      </div>
+      <div class="statcard">
+        <div class="statcard__label">LONGEST STREAK</div>
+        <div class="statcard__value"><span data-gh-longest>&mdash;</span><small>days</small></div>
+      </div>
+      <div class="statcard">
+        <div class="statcard__label">BUSIEST DAY</div>
+        <div class="statcard__value"><span data-gh-best>&mdash;</span><small data-gh-best-date></small></div>
+      </div>
+      <a class="statcard statcard--cta" href="https://github.com/intelligent-ears" target="_blank" rel="noopener">See it on GitHub<span aria-hidden="true">&#8599;</span></a>
     </div>
   </div>
 </section>
@@ -551,51 +560,38 @@
 <!-- ========================= footer ========================= -->
 <footer class="footer">
   <div class="shell">
-    <div class="footer__grid">
-      <div>
-        <div class="footer__brand">
-          <svg viewBox="0 0 100 100" style="color:#E0482A" aria-hidden="true"><use href="#logomark"/></svg>
-          <span>ARYA</span>
-        </div>
-        <p class="footer__blurb">K Arya Sekhar Das. Break, build, ship, secure — from Jaipur.</p>
+    <div class="footer__top">
+      <div class="footer__signoff">
+        <div class="footer__label">SIGNING OFF</div>
+        <p>Thanks for scrolling. Go break something &mdash; <em>responsibly.</em></p>
       </div>
-
-      <div>
-        <div class="footer__label">NAVIGATE</div>
-        <nav class="footer__list" aria-label="Footer">
-          <a href="#home">Home</a>
-          <a href="#about">About</a>
-          <a href="#work">Work</a>
-          <a href="#research">Research</a>
-          <a href="#writing">Writing</a>
-          <a href="#contact">Contact</a>
-        </nav>
+      <div class="footer__marks">
+        <div class="footer__badge" data-badge="floppy" aria-hidden="true"></div>
+        <a class="footer__top-link" href="#home" aria-label="Back to top">&uarr;</a>
       </div>
+    </div>
 
-      <div>
-        <div class="footer__label">ELSEWHERE</div>
-        <div class="footer__list">
-          <a href="https://github.com/intelligent-ears" target="_blank" rel="noopener">GitHub <span class="dim">intelligent-ears</span></a>
-          <a href="https://x.com/intel_ears" target="_blank" rel="noopener">X <span class="dim">@intel_ears</span></a>
-          <a href="https://app.hackthebox.com/users" target="_blank" rel="noopener">HTB <span class="dim">1nt3ll1g3ntears</span></a>
-          <a href="https://medium.com/@24UEC247" target="_blank" rel="noopener">Medium <span class="dim">@24UEC247</span></a>
-          <a href="https://linkedin.com/in/intelligentears" target="_blank" rel="noopener">LinkedIn <span class="dim">intelligentears</span></a>
-        </div>
-      </div>
-
-      <div>
-        <div class="footer__label">WRITE TO ME</div>
-        <a class="footer__mail" href="mailto:24uec247@lnmiit.ac.in">24uec247@<br>lnmiit.ac.in</a>
-      </div>
-
-      <div class="footer__badge" data-badge="floppy" aria-hidden="true"></div>
+    <div class="footer__socials">
+      <a href="https://github.com/intelligent-ears" target="_blank" rel="noopener">GitHub <span class="dim">intelligent-ears</span> <span aria-hidden="true">&#8599;</span></a>
+      <a href="https://x.com/intel_ears" target="_blank" rel="noopener">X <span class="dim">@intel_ears</span> <span aria-hidden="true">&#8599;</span></a>
+      <a href="https://app.hackthebox.com/users" target="_blank" rel="noopener">HTB <span class="dim">1nt3ll1g3ntears</span> <span aria-hidden="true">&#8599;</span></a>
+      <a href="https://medium.com/@24UEC247" target="_blank" rel="noopener">Medium <span class="dim">@24UEC247</span> <span aria-hidden="true">&#8599;</span></a>
+      <a href="https://linkedin.com/in/intelligentears" target="_blank" rel="noopener">LinkedIn <span class="dim">intelligentears</span> <span aria-hidden="true">&#8599;</span></a>
     </div>
 
     <div class="footer__bar">
-      <span>© 2026 K Arya Sekhar Das</span>
-      <a href="#home">Back to top ↑</a>
+      <nav class="footer__nav" aria-label="Footer">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#activity">Activity</a>
+        <a href="#writing">Writing</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <span>&copy; 2026 K Arya Sekhar Das &middot; Jaipur, IN</span>
     </div>
   </div>
+
+  <div class="footer__wordmark" aria-hidden="true">INTEL <span>EARS</span></div>
 </footer>
 
 </div><!-- /.page -->

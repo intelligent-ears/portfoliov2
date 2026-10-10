@@ -50,15 +50,18 @@ them out of source control, not out of the bundle. Restrict abuse with
 The form also carries a hidden `company_site` honeypot; submissions that fill it
 are dropped silently.
 
-## Missing asset
+## GitHub activity
 
-`assets/arya-cutout.png` (the cut-out portrait in the hero) could not be pulled
-from the design project — it exceeds the 256 KiB transfer cap on that API. Every
-other asset is here.
+The Activity section pulls the last year of contributions for `intelligent-ears`
+from `github-contributions-api.jogruber.de` on page load. No token, no key —
+it reads the same public calendar the profile page shows.
 
-Download it from the design project and drop it at `assets/arya-cutout.png`.
-Until then the hero hides the image rather than showing a broken-image icon; the
-torn mustard backdrop and the surrounding doodles still render.
+If the request fails the section still renders: an empty year of dots, dashes in
+the stat cards, and a line pointing at the real profile. Nothing blocks the rest
+of the page.
+
+To point it at a different account, change `GH_USER` at the top of the GitHub
+block in `main.js`.
 
 ## Files
 
@@ -67,7 +70,7 @@ torn mustard backdrop and the surrounding doodles still render.
 | `index.html` | All markup, plus the SVG filter defs and reusable marks |
 | `styles.css` | Every style; design tokens are CSS custom properties on `:root` |
 | `data.js` | Skills, timeline and contact topics — **edit content here** |
-| `main.js` | Mobile nav, list rendering, badges, draw-on underlines |
+| `main.js` | Nav, list rendering, badges, draw-on, GitHub graph, loader, cursor |
 | `contact.js` | Validation and EmailJS submit |
 | `build-env.js` | Reads `.env`, writes `env.generated.js` (`window.__ENV`) |
 | `.env` | Your keys — gitignored |
@@ -88,22 +91,36 @@ change them in `data.js` and the page re-renders them on load:
 Placeholders left deliberately, to fill in when you have the content:
 
 - the three **Writing** cards say `[ Article title — pull from Medium ]`
-- the **MAKERCHIP-ATLAS** work card is marked `LINK TBD` and links to `#work`
+- the **MAKERCHIP-ATLAS** work card links to `#work`, not a repo
 - the HTB footer link points at the HTB users index, not your profile
 - the Minder timeline entry reads `[START DATE] – NOW`
 
-## Motion and grain
+## Behaviour flags
 
-Two opt-outs, mirroring the "Tweaks" the design exposed. Define them before
-`main.js` runs:
+Mirrors the "Tweaks" the design exposes. Define before `main.js` runs:
 
 ```html
-<script>window.PORTFOLIO_FLAGS = { motion: false, grain: false };</script>
+<script>
+  window.PORTFOLIO_FLAGS = { motion: true, grain: true, loader: true, cursorStyle: 'tag' };
+</script>
 ```
 
-`motion: false` stops all animation and skips the draw-on underlines;
-`grain: false` removes the paper-grain overlay. `prefers-reduced-motion` is
-honoured regardless.
+| Flag | Effect |
+| --- | --- |
+| `motion: false` | Stops all animation and skips the draw-on underlines |
+| `grain: false` | Removes the paper-grain overlay |
+| `loader: false` | Skips the intro curtain entirely |
+| `cursorStyle` | `'tag'` (default), `'invert'`, `'ink'`, or `'off'` |
+
+`prefers-reduced-motion` is honoured regardless: the loader collapses to a brief
+static title card and the cursor stops easing.
+
+The custom cursor only engages on `(hover: hover) and (pointer: fine)`, so touch
+devices keep the native one. The native cursor is hidden via `html[data-cursor]`,
+which JS sets — if scripts fail, the normal cursor stays.
+
+The loader locks scrolling while it plays and has a 7s backstop that force-clears
+it, so a stalled animation cannot leave the page unscrollable.
 
 ## Deploying
 
@@ -145,7 +162,11 @@ Rendered in headless Edge at desktop (1440px) and mobile (390px):
 - all sections lay out correctly and no element overflows horizontally
 - the mobile menu opens, closes on link click, and reports correct ARIA state
 - topic chips switch and write into the hidden `topic` field
-- skills, timeline and the three SVG badges render from data
+- skills, timeline and both SVG badges render from data
 - with no keys set, the submit button disables and the form explains why
+- the GitHub graph renders live data, and the graph scrolls on narrow screens
+- the loader composes and the wipe-out begins
 
-Not verified: an actual send through EmailJS, which needs real credentials.
+Not verified: an actual send through EmailJS, which needs real credentials; and
+the loader's exit wipe end-to-end — headless virtual time does not advance the
+Web Animations clock far enough to watch it land.
