@@ -257,7 +257,12 @@ html[data-still] * { animation: none !important; }
   margin: 0; font-family: var(--display); font-weight: 400;
   line-height: .8; letter-spacing: -.005em; text-transform: uppercase;
 }
-.hero__first { display: block; font-size: clamp(150px, 25vw, 350px); margin-left: -.04em; }
+/* "K ARYA" is ~1.38x the width of "ARYA", so the scale is reduced by that
+   factor to keep the same optical width; nowrap stops it breaking at the space. */
+.hero__first {
+  display: block; white-space: nowrap;
+  font-size: clamp(109px, 18.1vw, 254px); margin-left: -.04em;
+}
 .hero__last  { font-size: clamp(52px, 8.6vw, 124px); margin-top: .12em; }
 .hero__last > svg { left: -3%; bottom: -.2em; width: 106%; height: .34em; }
 .hero__lede {
