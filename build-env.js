@@ -8,6 +8,7 @@ const KEYS = [
   'EMAILJS_SERVICE_ID',
   'EMAILJS_TEMPLATE_ID',
   'CONTACT_FALLBACK_EMAIL',
+  'SITE_URL',
 ];
 
 function parseEnv(text) {

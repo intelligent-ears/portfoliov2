@@ -5,7 +5,12 @@
   "description": "Portfolio site for Arya",
   "scripts": {
     "build:env": "node build-env.js",
-    "start": "npm run build:env && npx --yes serve . -l 3000",
+    "build:posts": "node build-posts.js",
+    "build": "npm run build:env && npm run build:posts",
+    "start": "npm run build && npx --yes serve . -l 3000",
     "dev": "npm start"
+  },
+  "dependencies": {
+    "marked": "^18.1.1"
   }
 }

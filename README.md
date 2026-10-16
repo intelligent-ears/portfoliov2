@@ -50,6 +50,68 @@ them out of source control, not out of the bundle. Restrict abuse with
 The form also carries a hidden `company_site` honeypot; submissions that fill it
 are dropped silently.
 
+## Writing
+
+Posts are markdown files in `posts/`. The build turns each one into a page,
+regenerates the archive and the RSS feed, and puts the three newest onto the
+homepage. There is no index to maintain — adding a file is the whole step.
+
+```
+posts/2026-03-02-mr-robot-ctf-thm.md  ->  /writing/mr-robot-ctf-thm/
+```
+
+The filename sets the slug: the leading `YYYY-MM-DD-` is stripped. Each file
+opens with frontmatter:
+
+```markdown
+---
+title: Mr Robot CTF (THM)
+date: 2026-03-02
+tag: CTF WRITE-UP
+summary: One line, used on the card and as the social preview.
+medium: https://medium.com/@24UEC247/...
+draft: true
+---
+
+The post, in normal markdown.
+```
+
+| Key | |
+| --- | --- |
+| `title`, `date` | Required; the build fails loudly without them |
+| `tag` | The small label on the card. Defaults to `WRITING` |
+| `summary` | Card text and `og:description` |
+| `medium` | Optional. Adds a "Read on Medium" button; omit it and no button renders |
+| `draft` | `true` keeps it out of the build entirely |
+| `slug` | Optional override for the URL |
+
+Read time is computed from the word count, so you never set it by hand.
+
+### Publishing
+
+```
+npm run build        # or just push — Vercel runs the same command
+```
+
+Drop the file in `posts/`, commit, push. The three newest cards on the homepage
+are rewritten between the `<!-- posts:start -->` / `<!-- posts:end -->` markers
+in `index.html`; everything outside those markers is yours to edit.
+
+While every post is a draft, the build leaves those cards exactly as they are
+rather than replacing them with nothing.
+
+`writing/` and `feed.xml` are generated and gitignored — don't edit them.
+
+### Also posting to Medium
+
+The self-hosted page is the canonical one. Put the Medium URL in `medium:` and
+the post gets a button through to it.
+
+On Medium's side, set the canonical URL back to your own page — their import
+tool does this automatically if you paste your URL, or you can set it under
+story settings. Without that you're competing with yourself in search results,
+and Medium usually wins.
+
 ## GitHub activity
 
 The Activity section pulls the last year of contributions for `intelligent-ears`
@@ -73,6 +135,8 @@ block in `main.js`.
 | `main.js` | Nav, list rendering, badges, draw-on, GitHub graph, loader, cursor |
 | `contact.js` | Validation and EmailJS submit |
 | `build-env.js` | Reads `.env`, writes `env.generated.js` (`window.__ENV`) |
+| `build-posts.js` | Turns `posts/*.md` into pages, the archive and the feed |
+| `posts/` | Your writing, as markdown |
 | `.env` | Your keys — gitignored |
 | `assets/` | Images |
 

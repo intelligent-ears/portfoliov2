@@ -836,3 +836,96 @@ html[data-cursor] input, html[data-cursor] textarea { cursor: text !important; }
   background: var(--ink); transform-origin: 0 50%; transform: scaleX(0);
 }
 .loader__deco { position: absolute; }
+
+/* --- writing: article + archive ------------------------------------------ */
+
+.post__summary {
+  margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink); opacity: .72;
+}
+.archive__empty { font-family: var(--mono); font-size: 14px; opacity: .7; }
+
+.article {
+  position: relative;
+  max-width: 44rem; margin: 0 auto;
+  padding: clamp(32px, 5vw, 64px) var(--gutter) clamp(72px, 9vw, 120px);
+}
+.article__head { margin-bottom: clamp(32px, 4vw, 48px); }
+.article__back {
+  display: inline-block; margin-bottom: 28px;
+  font-family: var(--mono); font-size: 13px; letter-spacing: .06em; opacity: .75;
+}
+.article__back:hover { opacity: 1; }
+.article__title {
+  margin: 0; font-family: var(--serif); font-weight: 400;
+  font-size: clamp(38px, 5.4vw, 68px); line-height: 1.02;
+  letter-spacing: -.015em; text-wrap: balance;
+}
+.article__meta {
+  margin: 18px 0 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-family: var(--mono); font-size: 13px; opacity: .7;
+}
+.article__actions { margin-top: 26px; }
+.article__foot {
+  margin-top: clamp(48px, 6vw, 72px); padding-top: 28px;
+  border-top: 1px solid rgba(22, 20, 18, .18);
+  display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+}
+
+/* --- prose --- */
+
+.prose { font-size: 18px; line-height: 1.7; text-wrap: pretty; }
+.prose > * + * { margin-top: 1.1em; }
+.prose h2, .prose h3, .prose h4 {
+  font-family: var(--serif); font-weight: 400; line-height: 1.15;
+  letter-spacing: -.01em; margin-top: 1.8em; margin-bottom: .1em;
+}
+.prose h2 { font-size: clamp(28px, 3.4vw, 38px); }
+.prose h3 { font-size: clamp(22px, 2.6vw, 28px); }
+.prose h4 { font-size: 20px; font-family: var(--sans); font-weight: 700; }
+.prose p { margin: 0; }
+.prose a { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.prose a:hover { color: var(--orange); }
+.prose strong { font-weight: 700; }
+.prose ul, .prose ol { margin: 0; padding-left: 1.3em; }
+.prose li + li { margin-top: .4em; }
+.prose li::marker { color: var(--orange); }
+.prose img { display: block; max-width: 100%; height: auto; border-radius: 14px; border: 1px solid rgba(22,20,18,.2); }
+.prose hr { border: 0; border-top: 1px dashed rgba(22, 20, 18, .3); margin: 2.4em 0; }
+
+.prose blockquote {
+  margin: 0; padding: 2px 0 2px 20px;
+  border-left: 3px solid var(--mustard);
+  font-family: var(--serif); font-size: 1.1em; font-style: italic;
+}
+.prose blockquote p { margin: 0; }
+
+.prose code {
+  font-family: var(--mono); font-size: .86em;
+  background: rgba(22, 20, 18, .07); border-radius: 4px; padding: .15em .4em;
+}
+.prose pre {
+  margin: 0; overflow-x: auto;
+  background: var(--ink); color: var(--cream);
+  border-radius: 14px; padding: 18px 20px; line-height: 1.55;
+}
+/* The <pre> already carries the block styling; the inner <code> must not
+   repeat the inline chip treatment. */
+.prose pre code {
+  background: none; padding: 0; font-size: 14px; color: inherit;
+}
+
+.prose table {
+  width: 100%; border-collapse: collapse; font-size: 15px;
+  display: block; overflow-x: auto;
+}
+.prose th, .prose td {
+  text-align: left; padding: 10px 14px;
+  border-bottom: 1px solid rgba(22, 20, 18, .18);
+}
+.prose th { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+
+/* The archive holds an arbitrary number of posts, so keep empty tracks —
+   auto-fit would stretch one or two cards across the whole row. */
+.writing__grid--archive {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+}
