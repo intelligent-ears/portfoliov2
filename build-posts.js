@@ -37,6 +37,7 @@ function siteUrl() {
 
 const SITE_URL = siteUrl();
 const WORDS_PER_MINUTE = 200;
+const HOMEPAGE_COUNT = 3;
 
 /* --- helpers ---------------------------------------------------------- */
 
@@ -351,6 +352,7 @@ ${items}
 function build() {
   const indexPath = path.join(ROOT, 'index.html');
   let index = fs.readFileSync(indexPath, 'utf8');
+  const original = index;
 
   const chrome = {
     defs: extract(index, '<svg class="defs"', 'svg'),
@@ -384,6 +386,22 @@ function build() {
   fs.writeFileSync(path.join(ROOT, 'feed.xml'), feed(posts));
 
   // Newest three onto the homepage
+  // The "All writing" link only earns its place once the archive holds more
+  // than the homepage already shows — otherwise it leads to the same cards.
+  // This runs first: it changes the length of index, so the post markers
+  // must be located afterwards or their offsets go stale.
+  const MORE_START = '<!-- morelink:start -->';
+  const MORE_END = '<!-- morelink:end -->';
+  const ms = index.indexOf(MORE_START);
+  const me = index.indexOf(MORE_END);
+  if (ms !== -1 && me !== -1) {
+    const link = posts.length > HOMEPAGE_COUNT
+      ? '<a class="pill pill--sm pill--outline" href="/writing/">All writing' +
+        '<span class="pill__glyph" aria-hidden="true">&rarr;</span></a>'
+      : '';
+    index = index.slice(0, ms + MORE_START.length) + link + index.slice(me);
+  }
+
   const START = '<!-- posts:start -->';
   const END = '<!-- posts:end -->';
   const s = index.indexOf(START);
@@ -391,17 +409,19 @@ function build() {
   if (s === -1 || e === -1) {
     throw new Error('index.html is missing the ' + START + ' / ' + END + ' markers');
   }
+
   if (!posts.length) {
     // Never replace hand-written cards with nothing — while every post is
     // still a draft the existing markup stays exactly as it is.
     console.log('No published posts; left the homepage cards untouched');
   } else {
-    const cards = posts.slice(0, 3).map(card).join('\n');
-    const next = index.slice(0, s + START.length) + '\n' + cards + '\n      ' + index.slice(e);
-    if (next !== index) {
-      fs.writeFileSync(indexPath, next);
-      console.log('Updated the homepage cards');
-    }
+    const cards = posts.slice(0, HOMEPAGE_COUNT).map(card).join('\n');
+    index = index.slice(0, s + START.length) + '\n' + cards + '\n      ' + index.slice(e);
+  }
+
+  if (index !== original) {
+    fs.writeFileSync(indexPath, index);
+    console.log('Updated the homepage');
   }
 
   console.log('Built ' + posts.length + ' post' + (posts.length === 1 ? '' : 's') +
