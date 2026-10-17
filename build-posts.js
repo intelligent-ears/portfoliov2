@@ -155,7 +155,9 @@ function loadPosts() {
         draft: String(meta.draft).toLowerCase() === 'true',
         minutes: readingTime(text),
         assets,
-        html: marked.parse(text),
+        // marked wraps a standalone image in <p>; unwrapping it lets the
+        // stylesheet widen screenshots past the text measure.
+        html: marked.parse(text).replace(/<p>(\s*<img\b[^>]*>\s*)<\/p>/g, '$1'),
       };
     })
     .filter((p) => !p.draft)
