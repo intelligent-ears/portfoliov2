@@ -19,7 +19,23 @@ const { marked } = require('marked');
 const ROOT = __dirname;
 const POSTS_DIR = path.join(ROOT, 'posts');
 const OUT_DIR = path.join(ROOT, 'writing');
-const SITE_URL = (process.env.SITE_URL || 'https://portfoliov2-arya.vercel.app').replace(/\/$/, '');
+/* Canonical links and the feed need an absolute origin. Prefer an explicit
+   SITE_URL; otherwise take Vercel's stable production domain, which it sets
+   for every build. Guessing a domain is worse than failing loudly — a wrong
+   canonical points search engines at someone else's site. */
+function siteUrl() {
+  if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, '');
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return 'https://' + process.env.VERCEL_PROJECT_PRODUCTION_URL.replace(/\/$/, '');
+  }
+  console.warn(
+    '[posts] Neither SITE_URL nor VERCEL_PROJECT_PRODUCTION_URL is set — ' +
+    'canonical links and feed URLs will be relative to the site root.'
+  );
+  return '';
+}
+
+const SITE_URL = siteUrl();
 const WORDS_PER_MINUTE = 200;
 
 /* --- helpers ---------------------------------------------------------- */
