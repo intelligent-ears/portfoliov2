@@ -110,6 +110,22 @@ function loadPosts() {
       if (!meta.title) throw new Error(file + ': missing "title" in frontmatter');
       if (!meta.date) throw new Error(file + ': missing "date" in frontmatter');
 
+      // The page template already renders the title as the <h1>, so a leading
+      // H1 in the body would be a duplicate.
+      const text = body.replace(/^\s*#\s+.*(\r?\n)+/, '');
+
+      // Local images are copied next to the generated page, so the relative
+      // src in the markdown keeps working untouched.
+      const assets = [];
+      const img = /!\[[^\]]*\]\(([^)\s]+)/g;
+      let m;
+      while ((m = img.exec(text)) !== null) {
+        const ref = m[1];
+        if (/^(https?:)?\/\//.test(ref) || ref.startsWith('/') || ref.startsWith('data:')) continue;
+        const name = decodeURIComponent(ref);
+        if (!assets.includes(name)) assets.push(name);
+      }
+
       return {
         file,
         slug,
@@ -120,8 +136,9 @@ function loadPosts() {
         summary: meta.summary || '',
         medium: meta.medium || '',
         draft: String(meta.draft).toLowerCase() === 'true',
-        minutes: readingTime(body),
-        html: marked.parse(body),
+        minutes: readingTime(text),
+        assets,
+        html: marked.parse(text),
       };
     })
     .filter((p) => !p.draft)
@@ -274,7 +291,7 @@ function archivePage(posts, chrome) {
       <a class="pill pill--sm pill--outline" href="/feed.xml">RSS<span class="pill__glyph" aria-hidden="true">&rarr;</span></a>
     </div>
 
-    <div class="grid writing__grid writing__grid--archive">
+    <div class="grid writing__grid">
 ${cards}
     </div>
   </div>
@@ -329,10 +346,21 @@ function build() {
 
   // Article pages
   fs.mkdirSync(OUT_DIR, { recursive: true });
+  let copied = 0;
   for (const post of posts) {
     const dir = path.join(OUT_DIR, post.slug);
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, 'index.html'), articlePage(post, chrome));
+
+    for (const name of post.assets) {
+      const from = path.join(POSTS_DIR, name);
+      if (!fs.existsSync(from)) {
+        console.warn("  " + post.file + ": image not found -> " + name);
+        continue;
+      }
+      fs.copyFileSync(from, path.join(dir, path.basename(name)));
+      copied++;
+    }
   }
 
   // Archive + feed
@@ -361,7 +389,7 @@ function build() {
   }
 
   console.log('Built ' + posts.length + ' post' + (posts.length === 1 ? '' : 's') +
-    ' -> writing/, feed.xml');
+    ' and copied ' + copied + ' image' + (copied === 1 ? '' : 's') + ' -> writing/, feed.xml');
   if (!posts.length) console.warn('No markdown found in posts/ — the writing section will be empty.');
 }
 

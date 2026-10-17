@@ -600,7 +600,12 @@ html[data-still] * { animation: none !important; }
 
 .writing { padding: clamp(80px, 9vw, 130px) var(--gutter); }
 .writing__h2 em { color: var(--orange); }
-.writing__grid { --min: 300px; }
+.writing__grid {
+  --min: 300px;
+  /* auto-fill, not auto-fit: keeps empty tracks so one or two posts stay
+     card-sized instead of stretching across the row. */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+}
 .post { border: 1px solid var(--ink); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; }
 .post__art { position: relative; height: 210px; overflow: hidden; }
 .post__no {
@@ -923,9 +928,3 @@ html[data-cursor] input, html[data-cursor] textarea { cursor: text !important; }
   border-bottom: 1px solid rgba(22, 20, 18, .18);
 }
 .prose th { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
-
-/* The archive holds an arbitrary number of posts, so keep empty tracks —
-   auto-fit would stretch one or two cards across the whole row. */
-.writing__grid--archive {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-}
