@@ -23,8 +23,25 @@ const OUT_DIR = path.join(ROOT, 'writing');
    SITE_URL; otherwise take Vercel's stable production domain, which it sets
    for every build. Guessing a domain is worse than failing loudly — a wrong
    canonical points search engines at someone else's site. */
+/* .env is only loaded by build-env.js, which writes a browser bundle rather
+   than populating process.env — so read it here too for local builds. */
+function fromDotEnv(key) {
+  const file = path.join(ROOT, '.env');
+  if (!fs.existsSync(file)) return '';
+  for (const line of fs.readFileSync(file, 'utf8').split(/\r?\n/)) {
+    const t = line.trim();
+    if (!t || t.startsWith('#')) continue;
+    const eq = t.indexOf('=');
+    if (eq === -1 || t.slice(0, eq).trim() !== key) continue;
+    return t.slice(eq + 1).trim().replace(/^['"]|['"]$/g, '');
+  }
+  return '';
+}
+
 function siteUrl() {
   if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, '');
+  const fromFile = fromDotEnv('SITE_URL');
+  if (fromFile) return fromFile.replace(/\/$/, '');
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
     return 'https://' + process.env.VERCEL_PROJECT_PRODUCTION_URL.replace(/\/$/, '');
   }
@@ -203,6 +220,21 @@ function card(post, index) {
 
 /* --- page shell -------------------------------------------------------- */
 
+/* Crawlers resolve og:image without a document base, so a relative path is
+   simply dropped. Emit nothing rather than something relative when there is
+   no absolute origin to build from. */
+function ogImageTags() {
+  if (!SITE_URL) return '<!-- og:image omitted: no SITE_URL to build an absolute URL from -->';
+  const src = SITE_URL + '/assets/og-card.png';
+  return [
+    '<meta property="og:image" content="' + escapeHtml(src) + '">',
+    '<meta property="og:image:width" content="1200">',
+    '<meta property="og:image:height" content="630">',
+    '<meta property="og:image:alt" content="INTEL EARS — security researcher, OSS maintainer">',
+    '<meta name="twitter:image" content="' + escapeHtml(src) + '">',
+  ].join('\n');
+}
+
 function shell(opts) {
   const { title, description, bodyClass, content, chrome, canonical } = opts;
   return `<!doctype html>
@@ -219,6 +251,9 @@ function shell(opts) {
 <meta property="og:description" content="${escapeHtml(description)}">
 <meta property="og:url" content="${escapeHtml(canonical)}">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeHtml(title)}">
+<meta name="twitter:description" content="${escapeHtml(description)}">
+${ogImageTags()}
 
 <link rel="alternate" type="application/rss+xml" title="K Arya Sekhar Das — Writing" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
