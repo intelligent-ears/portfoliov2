@@ -399,7 +399,9 @@ function build() {
 
   const posts = loadPosts();
 
-  // Article pages
+  // Article pages. The directory is fully generated, so clear it first —
+  // otherwise a renamed or deleted post leaves its old page served forever.
+  fs.rmSync(OUT_DIR, { recursive: true, force: true });
   fs.mkdirSync(OUT_DIR, { recursive: true });
   let copied = 0;
   for (const post of posts) {
