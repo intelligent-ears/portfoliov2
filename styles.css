@@ -942,3 +942,11 @@ html[data-cursor] input, html[data-cursor] textarea { cursor: text !important; }
   border-bottom: 1px solid rgba(22, 20, 18, .18);
 }
 .prose th { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+
+/* Article hero. Full column width like code blocks, with the intrinsic size
+   on the <img> so the page doesn't reflow as it loads. */
+.article__cover {
+  display: block; width: 100%; height: auto;
+  margin: clamp(28px, 4vw, 44px) 0 0;
+  border: 1px solid rgba(22, 20, 18, .2); border-radius: 16px;
+}

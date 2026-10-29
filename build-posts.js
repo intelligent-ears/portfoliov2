@@ -151,6 +151,7 @@ function loadPosts() {
       // Local images are copied next to the generated page, so the relative
       // src in the markdown keeps working untouched.
       const assets = [];
+      if (meta.cover) assets.push(meta.cover);
       const img = /!\[[^\]]*\]\(([^)\s]+)/g;
       let m;
       while ((m = img.exec(text)) !== null) {
@@ -169,6 +170,8 @@ function loadPosts() {
         tag: meta.tag || 'WRITING',
         summary: meta.summary || '',
         medium: meta.medium || '',
+        cover: meta.cover || '',
+        coverSize: meta.cover ? pngSize(path.join(POSTS_DIR, meta.cover)) : null,
         draft: String(meta.draft).toLowerCase() === 'true',
         minutes: readingTime(text),
         assets,
@@ -220,23 +223,44 @@ function card(post, index) {
 
 /* --- page shell -------------------------------------------------------- */
 
+/* Reads the pixel size straight out of a PNG's IHDR. Other formats return
+   null and the width/height hints are simply left off — better absent than
+   wrong. */
+function pngSize(file) {
+  try {
+    const b = fs.readFileSync(file);
+    if (b.slice(0, 8).toString('hex') !== '89504e470d0a1a0a') return null;
+    return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
+  } catch {
+    return null;
+  }
+}
+
 /* Crawlers resolve og:image without a document base, so a relative path is
    simply dropped. Emit nothing rather than something relative when there is
    no absolute origin to build from. */
-function ogImageTags() {
+function ogImageTags(src, size, alt) {
   if (!SITE_URL) return '<!-- og:image omitted: no SITE_URL to build an absolute URL from -->';
-  const src = SITE_URL + '/assets/og-card.png';
-  return [
-    '<meta property="og:image" content="' + escapeHtml(src) + '">',
-    '<meta property="og:image:width" content="1200">',
-    '<meta property="og:image:height" content="630">',
-    '<meta property="og:image:alt" content="INTEL EARS — security researcher, OSS maintainer">',
-    '<meta name="twitter:image" content="' + escapeHtml(src) + '">',
-  ].join('\n');
+  const url = SITE_URL + src;
+  const tags = ['<meta property="og:image" content="' + escapeHtml(url) + '">'];
+  if (size) {
+    tags.push('<meta property="og:image:width" content="' + size.w + '">');
+    tags.push('<meta property="og:image:height" content="' + size.h + '">');
+  }
+  tags.push('<meta property="og:image:alt" content="' + escapeHtml(alt) + '">');
+  tags.push('<meta name="twitter:image" content="' + escapeHtml(url) + '">');
+  return tags.join('\n');
 }
 
+const DEFAULT_CARD = {
+  src: '/assets/og-card.png',
+  size: { w: 1200, h: 630 },
+  alt: 'INTEL EARS — security researcher, OSS maintainer',
+};
+
 function shell(opts) {
-  const { title, description, bodyClass, content, chrome, canonical } = opts;
+  const { title, description, bodyClass, content, chrome, canonical, card } = opts;
+  const art = card || DEFAULT_CARD;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -253,7 +277,7 @@ function shell(opts) {
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${escapeHtml(title)}">
 <meta name="twitter:description" content="${escapeHtml(description)}">
-${ogImageTags()}
+${ogImageTags(art.src, art.size, art.alt)}
 
 <link rel="alternate" type="application/rss+xml" title="K Arya Sekhar Das — Writing" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -294,6 +318,15 @@ function articlePage(post, chrome) {
       '" target="_blank" rel="noopener">Read on Medium<span class="pill__glyph" aria-hidden="true">&#8599;</span></a>'
     : '';
 
+  // A cover doubles as the hero and as this post's social card, so a shared
+  // link previews the article's own art rather than the generic site card.
+  const coverFile = post.cover ? path.basename(post.cover) : '';
+  const cover = coverFile
+    ? '\n  <img class="article__cover" src="' + encodeURI(coverFile) +
+      '" alt="" width="' + (post.coverSize ? post.coverSize.w : '') +
+      '" height="' + (post.coverSize ? post.coverSize.h : '') + '">\n'
+    : '';
+
   const content = `<article class="article">
   <div class="article__head">
     <a class="article__back" href="/writing/">&larr; All writing</a>
@@ -306,7 +339,7 @@ function articlePage(post, chrome) {
     </p>
     ${mediumLink ? '<div class="article__actions">' + mediumLink + '</div>' : ''}
   </div>
-
+${cover}
   <div class="prose">
 ${post.html}
   </div>
@@ -324,6 +357,13 @@ ${post.html}
     content,
     chrome,
     canonical,
+    card: coverFile
+      ? {
+          src: '/writing/' + post.slug + '/' + encodeURI(coverFile),
+          size: post.coverSize,
+          alt: post.title,
+        }
+      : null,
   });
 }
 
