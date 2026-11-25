@@ -170,6 +170,7 @@ function loadPosts() {
         tag: meta.tag || 'WRITING',
         summary: meta.summary || '',
         medium: meta.medium || '',
+        authors: meta.authors || '',
         cover: meta.cover || '',
         coverSize: meta.cover ? pngSize(path.join(POSTS_DIR, meta.cover)) : null,
         draft: String(meta.draft).toLowerCase() === 'true',
@@ -333,6 +334,7 @@ function articlePage(post, chrome) {
     <p class="eyebrow">${escapeHtml(post.tag)}</p>
     <h1 class="article__title">${escapeHtml(post.title)}</h1>
     <p class="article__meta">
+      ${post.authors ? '<span>' + escapeHtml(post.authors) + '</span><span aria-hidden="true">&middot;</span>' : ''}
       <time datetime="${escapeHtml(post.date)}">${escapeHtml(post.dateLabel)}</time>
       <span aria-hidden="true">&middot;</span>
       <span>${post.minutes} min read</span>
