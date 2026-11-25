@@ -45,7 +45,7 @@ There is a partial way out of the second one: split the vendor's *engine* (code 
 
 ## What Unforged would have done
 
-Unforged is a Firefox extension we built at ETHGlobal Mumbai for a narrower case: dapp frontends, where one tampered file at Safe{Wallet}'s hosting cost Bybit about $1.5B in February 2025. Independent builders rebuild each release from the dapp's public source, sign the resulting manifest and publish it to Arkiv. The extension buffers every document, script, stylesheet and worker, hashes it before it reaches the page, and blocks anything that *k* of those builders didn't produce. Cross-origin scripts are blocked unless the curator's signed policy pins their exact hash.
+[Unforged](https://github.com/intelligent-ears/unforged) is a Firefox extension we built at ETHGlobal Mumbai for a narrower case: dapp frontends, where one tampered file at Safe{Wallet}'s hosting cost Bybit about $1.5B in February 2025. Independent builders rebuild each release from the dapp's public source, sign the resulting manifest and publish it to Arkiv. The extension buffers every document, script, stylesheet and worker, hashes it before it reaches the page, and blocks anything that *k* of those builders didn't produce. Cross-origin scripts are blocked unless the curator's signed policy pins their exact hash.
 
 Applied to a site that had enrolled, each OPTIMJACK variant fails a different check:
 
@@ -104,4 +104,7 @@ So the overhead on a visit is one buffered body per file plus milliseconds of ha
 
 ---
 
-**Sources:** OPTIMJACK: Optimizely-Hosted Scripts Loaded a Crypto Clipper and Card Skimmer on 178 Organizations, StepSecurity · Unforged: README, threat model and reproducibility study
+## Sources
+
+- [OPTIMJACK: Optimizely-Hosted Scripts Loaded a Crypto Clipper and Card Skimmer on 178 Organizations](https://www.stepsecurity.io/blog/optimjack-optimizely-hosted-scripts-crypto-clipper-card-skimmer), StepSecurity
+- [Unforged](https://github.com/intelligent-ears/unforged): README, threat model and reproducibility study
